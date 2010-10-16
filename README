@@ -1,0 +1,25 @@
+A Browser library for Python!
+
+Features:
+  + Curl Support
+  + Cookies
+
+Documentation: 
+Mailing list: 
+Chat: IRC freenode.net #
+      Web interface: 
+Wiki: 
+Bug tracker: 
+
+Souce code: 
+    Library: 
+    Examples: 
+
+Author: Ben Holloway
+License: MIT
+Dependencies:
+    Python 2.6 or newer
+
+
+===Resources===
+http://msdn.microsoft.com/en-us/library/system.net.httpwebresponse.aspx

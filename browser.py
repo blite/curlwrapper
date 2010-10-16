@@ -13,9 +13,18 @@ class Browser:
         self.currentProxy = ''
         self.tempfile = ''
         self.tempfilename = ''
-        self.userAgents = ['Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
-        'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6']
-        self.userAgent = self.userAgents[random.randrange(len(self.userAgents))]
+        self.userAgents = [
+        'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6',
+        'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)',
+        'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; Media Center PC 4.0; SLCC1; .NET CLR 3.0.04320)',
+        'Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 6.0)',
+        'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)',
+        'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 1.1.4322)',
+        'Mozilla/5.0 (Windows; U; Windows NT 5.2; en-GB; rv:1.9.2.9) Gecko/20100824 Firefox/3.6.9',
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; ro; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8'
+        ]
+        self.userAgent = random.choice(self.userAgents)
         self.retryLimit = 2
         self.timeout = 30
         self.keepAlive = False
@@ -39,7 +48,7 @@ class Browser:
         self.close()
     def getRandomProxy(self):
         if len(self.proxyList) > 1:
-            self.currentProxy = self.proxyList[random.randrange(len(self.proxyList))]
+            self.currentProxy = random.choice(self.proxyList)
     def getCookies(self):
         return ''
     def close(self):
@@ -142,6 +151,13 @@ class Browser:
 class BrowserResponse:
     def __init__(self, success = True, response = '',code= '', 
             errorCode = '', errorMsg=''):
+        
+        #unimplemented------------------------
+        self.server = '' #name of server that sent response
+        self.responseUri = ''#Gets the URI of the Internet resource that responded to the request.
+        self.cookies = ''#Gets or sets the cookies that are associated with this response.
+        
+        #implemented------------------------
         self.statusCode = code
         self.response = response
         self.success = success
