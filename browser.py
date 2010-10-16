@@ -60,7 +60,7 @@ class Browser:
         try:
             c = pycurl.Curl()
             if tries >= self.retryLimit:
-                return BrowserResponse(success=False,errorMsg = "tries greater than " + str(self.retryLimit), url)
+                return BrowserResponse(success=False,errorMsg = "tries greater than " + str(self.retryLimit) + " " + url)
                 exit
             elif tries > 0:
                 #print "retry "  + str(tries) + " " + str(id) + " " + time.strftime("%I:%M:%S %p",time.localtime())
