@@ -37,16 +37,22 @@ class Browser:
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
         self.getRandomProxy()
         self.headers = ["""Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5""" ,
-                       """Accept-Language: en-us,en;q=0.5""",
+                       """Accept-Language: en-US,en;q=0.5""",
                        """Accept-Encoding: gzip,deflate""",
-                       """Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7"""
+                       """Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3"""
                        ]
-        if self.keepAlive:
-            self.headers.append('Connection: keep-alive')
-            self.headers.append('Keep-Alive: 300')
+
     def __del__(self):
+    
         #print 'garbage collected'
         self.close()
+    def setKeepAlive(self):
+        #This should only be settable once
+        #currently doesn't allow you to turn off keep alive
+        if self.keepAlive == False:
+            self.headers.append('Connection: keep-alive')
+            self.headers.append('Keep-Alive: 300')
+            self.keepAlive = True
     def getRandomProxy(self):
         if len(self.proxyList) > 1:
             self.currentProxy = random.choice(self.proxyList)
@@ -186,6 +192,7 @@ class BrowserRequest:
         return None
 if __name__ == "__main__":
     b = Browser()
+    b.keepAlive = True
     response = b.simpleRequest('http://www.google.com')
     print response.statusCode, response.response
     print response.success

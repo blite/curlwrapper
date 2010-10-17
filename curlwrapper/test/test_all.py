@@ -1,4 +1,7 @@
 import unittest, sys
+import logging
+LOG_FILENAME = 'example.log'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 sys.path.append('..')
 from browser import Browser
 class BrowserTests(unittest.TestCase):
@@ -25,6 +28,11 @@ class BrowserTests(unittest.TestCase):
         
         self.assertEqual(self.b.simpleRequest('http://www.google.com/admin/'). 
             statusCode , 404)
+    def test_environment(self):
+        #print response.response
+        self.b.setKeepAlive()
+        r = self.b.simpleRequest('http://www.entropy.ch/software/macosx/php/test.php').response
+        logging.debug(r)
 
 if __name__ == '__main__':
     #unittest.main()
