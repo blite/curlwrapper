@@ -32,7 +32,7 @@ class BrowserTests(unittest.TestCase):
         #print response.response
         self.b.setKeepAlive()
         r = self.b.simpleRequest('http://www.entropy.ch/software/macosx/php/test.php').response
-        logging.debug(r)
+        #logging.debug(r)
 
 if __name__ == '__main__':
     #unittest.main()
