@@ -15,7 +15,16 @@ class BrowserTests(unittest.TestCase):
     def test_proxy(self):
         self.assertNotEqual(self.b.userAgent, '')
 
-
+    def test_basicHTTP(self):
+        #print response.response
+        self.assertEqual(self.b.simpleRequest('http://www.google.com'). 
+            statusCode , 200)
+        #print self.b.simpleRequest('htxp://www.google.com').errorMsg
+        self.assertEqual(self.b.simpleRequest('htxp://www.google.com'). 
+            errorCode , 1)
+        
+        self.assertEqual(self.b.simpleRequest('http://www.google.com/admin/'). 
+            statusCode , 404)
 
 if __name__ == '__main__':
     #unittest.main()

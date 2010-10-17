@@ -31,6 +31,7 @@ class Browser:
         self.useProxyDns = True
         self.range = None
         self.proxyType = "s4"
+        self.proxiesOnly = False # for secure only connections
         if cookies == True:
             self.tempfile, self.tempfilename = tempfile.mkstemp()
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
@@ -56,7 +57,15 @@ class Browser:
         if self.hasCookies == True:
             os.close(self.tempfile)
             os.remove(self.tempfilename)
-    def request(self, url, referer='', post=None, proxy="NO_PROXY", id='', tries=0, cookies = ''):
+    def simpleRequest(self,url):
+        return self.request(BrowserRequest(url))
+    def request(self, r):
+        url = r.url
+        referer = r.referer
+        post = r.post
+        proxy = r.proxy
+        tries = r.tries
+        cookies = r.cookies
         try:
             c = pycurl.Curl()
             if tries >= self.retryLimit:
@@ -107,9 +116,9 @@ class Browser:
             else:
                 #print "not using post"
                 pass
-            if self.currentProxy != '' and proxy != "NO_PROXY":
+            if self.currentProxy != '':
                 proxy = self.currentProxy
-            if proxy != None and proxy != "NO_PROXY":
+            if proxy != None:
                 c.setopt(pycurl.PROXY, proxy)
                 #c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
                 #6 should be socks4a
@@ -119,9 +128,8 @@ class Browser:
                     c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
                 elif self.proxyType == "s5":
                     c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS5)
-            elif proxy != "NO_PROXY":
+            elif proxy == None and self.proxiesOnly == True:
                 return BrowserResponse(success=False,errorMsg = "alert no proxy")
-                exit
             c.setopt(pycurl.HTTPHEADER, self.headers)
             IO = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, IO.write)
@@ -131,14 +139,13 @@ class Browser:
             c.close()
             response = IO.getvalue()
             
-            BrowserResponse(code=code,response=response)
-        except pycurl.error, inst:
+            return BrowserResponse(code=code,response=response)
+        except pycurl.error, e:
             if self.verbose:
                 pass
                 #print "pycurl error tries", tries, str(inst.args) ,  url
-            self.getRandomProxy()
-            self.request(url,referer,post,proxy,id,tries)
-            return BrowserResponse(success=False)
+            #TODO add retry code here
+            return BrowserResponse(success=False,errorMsg = "raised a pycurl.error " + str(e.args), errorCode = e[0])
         except Exception, inst:
             if self.verbose:
 				
@@ -146,8 +153,8 @@ class Browser:
                 e = sys.exc_info()[1]
                 print e
 
-            return BrowserResponse(success=False)
-        return BrowserResponse(success=False)
+            return BrowserResponse(success=False,errorMsg = "raised a general exception")
+        return BrowserResponse(success=False,errorMsg = "did nothing")
 class BrowserResponse:
     def __init__(self, success = True, response = '',code= '', 
             errorCode = '', errorMsg=''):
@@ -163,7 +170,23 @@ class BrowserResponse:
         self.success = success
         self.errorCode = errorCode
         self.errorMsg = errorMsg
-    
+        return None
 class BrowserRequest:
-    def __init__():
-        pass
+    def __init__(self, url=''):
+        #unimplemented
+        self.cookies =''
+        
+        #implemented
+        self.url= url
+        self.referer = self.url
+        self.post = None
+        self.proxy = None
+        self.tries = 0
+    
+        return None
+if __name__ == "__main__":
+    b = Browser()
+    response = b.simpleRequest('http://www.google.com')
+    print response.statusCode, response.response
+    print response.success
+    print response.errorMsg
