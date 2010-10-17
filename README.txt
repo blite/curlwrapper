@@ -9,6 +9,7 @@ often looks like this::
     #!/usr/bin/env python
 
     from curlwrapper import browser
+    import curlwrapper.browser
 
 
 (Note the double-colon and 4-space indent formatting above.)
