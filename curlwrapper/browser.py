@@ -142,10 +142,11 @@ class Browser:
             c.perform()
             
             code = c.getinfo(pycurl.HTTP_CODE)
+            responseURI = c.getinfo(pycurl.EFFECTIVE_URL)
             c.close()
             response = IO.getvalue()
             
-            return BrowserResponse(code=code,response=response)
+            return BrowserResponse(code=code,response=response, responseURI = responseURI)
         except pycurl.error, e:
             if self.verbose:
                 pass
@@ -163,12 +164,16 @@ class Browser:
         return BrowserResponse(success=False,errorMsg = "did nothing")
 class BrowserResponse:
     def __init__(self, success = True, response = '',code= '', 
-            errorCode = '', errorMsg=''):
+            errorCode = '', errorMsg='', responseURI = ''):
         
         #unimplemented------------------------
-        self.server = '' #name of server that sent response
-        self.responseUri = ''#Gets the URI of the Internet resource that responded to the request.
-        self.cookies = ''#Gets or sets the cookies that are associated with this response.
+        #name of server that sent response
+        self.server = '' 
+        #Gets the URI of the Internet resource that responded to 
+        #the request.
+        self.responseURI = responseURI
+        #Gets or sets the cookies that are associated with this response.
+        self.cookies = ''
         
         #implemented------------------------
         self.statusCode = code
