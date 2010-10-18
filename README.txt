@@ -18,15 +18,10 @@ Paragraphs are separated by blank lines. *Italics*, **bold**,
 and ``monospace`` look like this.
 
 
-A Section
+Installation
 =========
 
-Lists look like this:
-
-* First
-
-* Second. Can be multiple lines
-  but must be indented properly.
+(sudo) easy_install CurlWrapper
 
 A Sub-Section
 -------------

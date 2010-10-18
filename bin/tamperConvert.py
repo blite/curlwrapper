@@ -49,6 +49,7 @@ class MyFrame1(wx.Frame):
     def onTxt1(self, event): # wxGlade: MyFrame1.<event_handler>
         orig = self.text_ctrl_1.GetValue()
         new = orig.replace('POSTDATA=','')
+        
         try:
             
             new = urllib.unquote(new)
@@ -61,10 +62,10 @@ class MyFrame1(wx.Frame):
 
         except Exception, myerror:
             print myerror
-            formated = new
+            formatted = new
         
-        self.text_ctrl_2.SetValue(formatted)=
-        event.Skip()
+        self.text_ctrl_2.SetValue(formatted)
+        #event.Skip()
 
 # end of class MyFrame1
 
