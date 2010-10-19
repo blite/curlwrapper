@@ -69,7 +69,7 @@ class Browser:
     def get_random_proxy(self):
         if len(self.proxyList) > 1:
             self.currentProxy = random.choice(self.proxyList)
-    def getCookies(self):
+    def get_cookies(self):
         return ''
     def close(self):
         #file exists
@@ -180,8 +180,8 @@ class Browser:
             return BrowserResponse(success=False,errorMsg = "raised a general exception")
         return BrowserResponse(success=False,errorMsg = "did nothing")
 class BrowserResponse:
-    def __init__(self, success = True, response = '',code= '', 
-            errorCode = '', errorMsg='', responseURI = ''):
+    def __init__(self, success=True, response='',code='', 
+            errorCode='', errorMsg='', responseURI=''):
         
         #unimplemented------------------------
         #name of server that sent response
