@@ -3,6 +3,7 @@ import logging
 LOG_FILENAME = 'example.log'
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 sys.path.append('..')
+#TODO make sure this is correct
 from curlwrapper.browser import Browser
 class BrowserTests(unittest.TestCase):
 

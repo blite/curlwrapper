@@ -207,7 +207,7 @@ class BrowserResponse:
         self.errorMsg = errorMsg
         return None
 class BrowserRequest:
-    def __init__(self, url='', post=None, referer=''):
+    def __init__(self, url='', post=None, referer='', proxy=None):
         #unimplemented
         self.cookies =''
         
@@ -218,14 +218,14 @@ class BrowserRequest:
         else:
             self.referer = referer
         self.post = post
-        self.proxy = None
+        self.proxy = proxy
         self.tries = 0
     
         return None
 if __name__ == "__main__":
     b = Browser()
     b.keepAlive = True
-    response = b.simpleRequest('http://www.google.com')
+    response = b.simple_request('http://www.google.com')
     print response.statusCode, response.response
     print response.success
     print response.errorMsg
