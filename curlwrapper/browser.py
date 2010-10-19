@@ -2,10 +2,22 @@
 import pycurl
 import StringIO
 #todo switch to cStringIO
-import string, os, sys, time, urllib, tempfile, random
+import string
+import os
+import sys
+import time
+import urllib
+import tempfile
+import random
+PROXY_TYPES = ['SOCKS4','SOCKS4A','SOCKS5','AUTO','NONE']
+
 
 class Browser:
-    def __init__(self, cookies=False, redirect =True, proxyList = [], verbose = True):
+    def __init__(self, cookies=False, redirect =True, 
+        verbose = True):
+        # The browser doesn't need a proxy list it could be beneficial in
+        # the case of repeated failures, but honestly probably doesn't 
+        # contribute much
         self.hasCookies = cookies
         self.redirect = redirect
         self.proxyList = proxyList
@@ -30,12 +42,13 @@ class Browser:
         self.keepAlive = False
         self.useProxyDns = True
         self.range = None
-        self.proxyType = "s4"
+        
+        self.proxyType = "SOCKS4"
         self.proxiesOnly = False # for secure only connections
         if cookies == True:
             self.tempfile, self.tempfilename = tempfile.mkstemp()
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
-        self.getRandomProxy()
+        self.get_random_proxy()
         self.headers = ["""Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5""" ,
                        """Accept-Language: en-US,en;q=0.5""",
                        """Accept-Encoding: gzip,deflate""",
@@ -46,14 +59,14 @@ class Browser:
     
         #print 'garbage collected'
         self.close()
-    def setKeepAlive(self):
+    def set_keep_alive(self):
         #This should only be settable once
         #currently doesn't allow you to turn off keep alive
         if self.keepAlive == False:
             self.headers.append('Connection: keep-alive')
             self.headers.append('Keep-Alive: 300')
             self.keepAlive = True
-    def getRandomProxy(self):
+    def get_random_proxy(self):
         if len(self.proxyList) > 1:
             self.currentProxy = random.choice(self.proxyList)
     def getCookies(self):
@@ -63,8 +76,8 @@ class Browser:
         if self.hasCookies == True:
             os.close(self.tempfile)
             os.remove(self.tempfilename)
-    def simpleRequest(self,url):
-        return self.request(BrowserRequest(url))
+    def simple_request(self, url):
+        return self.request(BrowserRequest(url=url))
     def request(self, r):
         url = r.url
         referer = r.referer
@@ -75,7 +88,9 @@ class Browser:
         try:
             c = pycurl.Curl()
             if tries >= self.retryLimit:
-                return BrowserResponse(success=False,errorMsg = "tries greater than " + str(self.retryLimit) + " " + url)
+                return BrowserResponse(success=False, 
+                                        errorMsg="tries greater than " +
+                                        str(self.retryLimit) + " " + url)
                 exit
             elif tries > 0:
                 #print "retry "  + str(tries) + " " + str(id) + " " + time.strftime("%I:%M:%S %p",time.localtime())
@@ -128,14 +143,14 @@ class Browser:
                 c.setopt(pycurl.PROXY, proxy)
                 #c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
                 #6 should be socks4a
-                if self.useProxyDns and self.proxyType == "s4":
+                if self.useProxyDns and self.proxyType == "SOCKS4":
                     c.setopt(pycurl.PROXYTYPE,6)
-                elif self.proxyType == "s4":
+                elif self.proxyType == "SOCKS4":
                     c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
-                elif self.proxyType == "s5":
+                elif self.proxyType == "SOCKS5":
                     c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS5)
             elif proxy == None and self.proxiesOnly == True:
-                return BrowserResponse(success=False,errorMsg = "alert no proxy")
+                return BrowserResponse(success=False, errorMsg="alert no proxy")
             c.setopt(pycurl.HTTPHEADER, self.headers)
             IO = StringIO.StringIO()
             c.setopt(pycurl.WRITEFUNCTION, IO.write)
@@ -146,13 +161,15 @@ class Browser:
             c.close()
             response = IO.getvalue()
             
-            return BrowserResponse(code=code,response=response, responseURI = responseURI)
+            return BrowserResponse(code=code, response=response,
+                                    responseURI=responseURI)
         except pycurl.error, e:
             if self.verbose:
                 pass
                 #print "pycurl error tries", tries, str(inst.args) ,  url
             #TODO add retry code here
-            return BrowserResponse(success=False,errorMsg = "raised a pycurl.error " + str(e.args), errorCode = e[0])
+            return BrowserResponse(success=False, errorMsg="raised a \
+                            pycurl.error " + str(e.args), errorCode = e[0])
         except Exception, inst:
             if self.verbose:
 				
@@ -183,14 +200,17 @@ class BrowserResponse:
         self.errorMsg = errorMsg
         return None
 class BrowserRequest:
-    def __init__(self, url=''):
+    def __init__(self, url='', post=None, referer=''):
         #unimplemented
         self.cookies =''
         
         #implemented
         self.url= url
-        self.referer = self.url
-        self.post = None
+        if referer == '':
+            self.referer = self.url
+        else:
+            self.referer = referer
+        self.post = post
         self.proxy = None
         self.tries = 0
     
