@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-import pycurl
-import StringIO
-#todo switch to cStringIO
 import string
 import os
 import sys
@@ -9,18 +6,23 @@ import time
 import urllib
 import tempfile
 import random
+import StringIO
+#todo switch to cStringIO
+import pycurl
+
+
 PROXY_TYPES = ['SOCKS4','SOCKS4A','SOCKS5','AUTO','NONE']
 
 
 class Browser:
-    def __init__(self, cookies=False, redirect =True, 
-        verbose = True):
+    def __init__(self, cookies=False, redirect=True, 
+        verbose=True):
         # The browser doesn't need a proxy list it could be beneficial in
         # the case of repeated failures, but honestly probably doesn't 
         # contribute much
         self.hasCookies = cookies
         self.redirect = redirect
-        self.proxyList = proxyList
+        self.proxyList = []
         self.verbose = verbose
         self.currentProxy = ''
         self.tempfile = ''
