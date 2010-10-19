@@ -7,8 +7,16 @@ import urllib
 import tempfile
 import random
 import StringIO
+import logging
 #todo switch to cStringIO
 import pycurl
+
+
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+h = NullHandler()
+logging.getLogger("browser").addHandler(h)
 
 
 PROXY_TYPES = ['SOCKS4','SOCKS4A','SOCKS5','AUTO','NONE']
@@ -148,7 +156,7 @@ class Browser:
                 c.setopt(pycurl.PROXY, proxy)
                 #c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
                 #6 should be socks4a
-                if self.ProxyType == "AUTO":
+                if self.proxyType == "AUTO":
                     self.detect_proxy_type()
                 if self.useProxyDns and self.proxyType == "SOCKS4":
                     c.setopt(pycurl.PROXYTYPE,6)
@@ -182,7 +190,7 @@ class Browser:
 				
                 #print "pycurl error tries", tries, str(inst.args) ,  url
                 e = sys.exc_info()[1]
-                print e
+                logging.debug(e)
 
             return BrowserResponse(success=False,errorMsg = "raised a general exception")
         return BrowserResponse(success=False,errorMsg = "did nothing")

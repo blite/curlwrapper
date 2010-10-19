@@ -4,7 +4,7 @@ LOG_FILENAME = 'example.log'
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 sys.path.append('..')
 #TODO make sure this is correct
-from curlwrapper.browser import Browser
+from curlwrapper.browser import Browser, BrowserRequest
 class BrowserTests(unittest.TestCase):
 
     def setUp(self):
@@ -33,6 +33,11 @@ class BrowserTests(unittest.TestCase):
         #print response.response
         self.b.set_keep_alive()
         r = self.b.simple_request('http://www.entropy.ch/software/macosx/php/test.php').response
+    def test_proxy(self):
+        #testing proxy using tor
+        response = self.b.request(BrowserRequest(url='htxp://www.google.com', post=None, 
+                        referer='', proxy='127.0.0.1:9050'))
+        print response.response
         #logging.debug(r)
 
 if __name__ == '__main__':
