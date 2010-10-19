@@ -11,7 +11,7 @@ setup(
     version='0.1.2',
     author="Ben Holloway",
     author_email="yawollohneb@yahoo.com",
-    description="curlwrapper (browser)",
+    description="curlwrapper (browser interface for curl)",
     scripts=['bin/tamperConvert.py'],
     url="http://http://github.com/pythonben/curlwrapper",
     packages=['curlwrapper', 'curlwrapper.test'],
