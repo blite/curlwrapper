@@ -17,5 +17,6 @@ setup(
     packages=['curlwrapper', 'curlwrapper.test'],
     license="LICENSE.txt",
     long_description=open('README.txt').read(),
+    zip_safe=True,
 )
 

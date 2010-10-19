@@ -44,7 +44,7 @@ class Browser:
         self.keepAlive = False
         self.useProxyDns = True
         self.range = None
-        
+        #TODO: set default proxy type to AUTO req- enable detection
         self.proxyType = "SOCKS4"
         self.proxiesOnly = False # for secure only connections
         if cookies == True:
@@ -73,6 +73,8 @@ class Browser:
             self.currentProxy = random.choice(self.proxyList)
     def get_cookies(self):
         return ''
+    def detect_proxy_type(cls):
+        pass
     def close(self):
         #file exists
         if self.hasCookies == True:
@@ -81,6 +83,7 @@ class Browser:
     def simple_request(self, url):
         return self.request(BrowserRequest(url=url))
     def request(self, r):
+        """Performs a http request"""
         url = r.url
         referer = r.referer
         post = r.post
@@ -113,7 +116,7 @@ class Browser:
             if self.redirect == True:
                 c.setopt(pycurl.FOLLOWLOCATION, True)
                 c.setopt(pycurl.MAXREDIRS, 5)
-            elif self.redirect ==False:
+            elif self.redirect == False:
                 c.setopt(pycurl.FOLLOWLOCATION, False)
                 c.setopt(pycurl.MAXREDIRS, 0)
             c.setopt(pycurl.NOSIGNAL, 1)
@@ -145,6 +148,8 @@ class Browser:
                 c.setopt(pycurl.PROXY, proxy)
                 #c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
                 #6 should be socks4a
+                if self.ProxyType == "AUTO":
+                    self.detect_proxy_type()
                 if self.useProxyDns and self.proxyType == "SOCKS4":
                     c.setopt(pycurl.PROXYTYPE,6)
                 elif self.proxyType == "SOCKS4":
