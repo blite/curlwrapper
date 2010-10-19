@@ -1,0 +1,95 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module curlwrapper.browser</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="curlwrapper.html"><font color="#ffffff">curlwrapper</font></a>.browser</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/usr/local/lib/python2.6/dist-packages/curlwrapper-0.1.3-py2.6.egg/curlwrapper/browser.py">/usr/local/lib/python2.6/dist-packages/curlwrapper-0.1.3-py2.6.egg/curlwrapper/browser.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="StringIO.html">StringIO</a><br>
+<a href="os.html">os</a><br>
+<a href="pycurl.html">pycurl</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+<a href="string.html">string</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="tempfile.html">tempfile</a><br>
+<a href="time.html">time</a><br>
+<a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="curlwrapper.browser.html#Browser">Browser</a>
+</font></dt><dt><font face="helvetica, arial"><a href="curlwrapper.browser.html#BrowserRequest">BrowserRequest</a>
+</font></dt><dt><font face="helvetica, arial"><a href="curlwrapper.browser.html#BrowserResponse">BrowserResponse</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Browser">class <strong>Browser</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Browser-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Browser-__init__"><strong>__init__</strong></a>(self, cookies<font color="#909090">=False</font>, redirect<font color="#909090">=True</font>, verbose<font color="#909090">=True</font>)</dt></dl>
+
+<dl><dt><a name="Browser-close"><strong>close</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Browser-detect_proxy_type"><strong>detect_proxy_type</strong></a>(cls)</dt></dl>
+
+<dl><dt><a name="Browser-get_cookies"><strong>get_cookies</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Browser-get_random_proxy"><strong>get_random_proxy</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Browser-request"><strong>request</strong></a>(self, r)</dt><dd><tt>Performs&nbsp;a&nbsp;http&nbsp;request</tt></dd></dl>
+
+<dl><dt><a name="Browser-set_keep_alive"><strong>set_keep_alive</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Browser-simple_request"><strong>simple_request</strong></a>(self, url)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BrowserRequest">class <strong>BrowserRequest</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BrowserRequest-__init__"><strong>__init__</strong></a>(self, url<font color="#909090">=''</font>, post<font color="#909090">=None</font>, referer<font color="#909090">=''</font>)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BrowserResponse">class <strong>BrowserResponse</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BrowserResponse-__init__"><strong>__init__</strong></a>(self, success<font color="#909090">=True</font>, response<font color="#909090">=''</font>, code<font color="#909090">=''</font>, errorCode<font color="#909090">=''</font>, errorMsg<font color="#909090">=''</font>, responseURI<font color="#909090">=''</font>)</dt></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>PROXY_TYPES</strong> = ['SOCKS4', 'SOCKS4A', 'SOCKS5', 'AUTO', 'NONE']</td></tr></table>
+</body></html>
