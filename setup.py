@@ -8,7 +8,7 @@ from distutils.core import setup
 
 setup(
     name="curlwrapper",
-    version='0.1.2',
+    version='0.1.3',
     author="Ben Holloway",
     author_email="yawollohneb@yahoo.com",
     description="curlwrapper (browser interface for curl)",

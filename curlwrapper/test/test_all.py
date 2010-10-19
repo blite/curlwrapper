@@ -3,7 +3,7 @@ import logging
 LOG_FILENAME = 'example.log'
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 sys.path.append('..')
-from browser import Browser
+from curlwrapper.browser import Browser
 class BrowserTests(unittest.TestCase):
 
     def setUp(self):
