@@ -1,5 +1,5 @@
 ===========
-CurlWrapper
+curlwrapper
 ===========
 
 Towel Stuff provides such and such and so and so. You might find

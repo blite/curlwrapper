@@ -7,13 +7,13 @@
 from distutils.core import setup
 
 setup(
-    name="CurlWrapper",
+    name="curlwrapper",
     version='0.1.2',
     author="Ben Holloway",
     author_email="yawollohneb@yahoo.com",
-    description="CurlWrapper (browser)",
+    description="curlwrapper (browser)",
     scripts=['bin/tamperConvert.py'],
-    url="http://github.com/pythonben/Python-Curl-Wrapper",
+    url="http://http://github.com/pythonben/curlwrapper",
     packages=['curlwrapper', 'curlwrapper.test'],
     license="LICENSE.txt",
     long_description=open('README.txt').read(),
