@@ -56,6 +56,7 @@ class MyFrame1(wx.Frame):
             new = parse_qs(new)
             if self.format_radio.GetSelection() == 1:
                 new = convert(new)
+            new = makeFlat(new)
             pp = pprint.PrettyPrinter(indent=4)
             formatted = pp.pformat(new)
             #print new.toString()
@@ -78,6 +79,12 @@ def convert(data):
         return type(data)(map(convert, data))
     else:
         return data
+def makeFlat(data):
+    for k, v in data.items():
+        if isinstance(v, (list, tuple, set, frozenset)):
+            data[k] = v[0]
+    return data
+    
 if __name__ == "__main__":
     app = wx.PySimpleApp(0)
     wx.InitAllImageHandlers()

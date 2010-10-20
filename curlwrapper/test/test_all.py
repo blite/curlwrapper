@@ -35,9 +35,11 @@ class BrowserTests(unittest.TestCase):
         r = self.b.simple_request('http://www.entropy.ch/software/macosx/php/test.php').response
     def test_proxy(self):
         #testing proxy using tor
-        response = self.b.request(BrowserRequest(url='htxp://www.google.com', post=None, 
+        print 'haha'
+        response = self.b.request(BrowserRequest(url='http://www.google.com', post=None, 
                         referer='', proxy='127.0.0.1:9050'))
-        print response.response
+        if response.success:
+            print "worked"
         #logging.debug(r)
 
 if __name__ == '__main__':
