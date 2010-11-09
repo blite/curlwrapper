@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-import string
 import os
 import sys
-import time
-import urllib
 import tempfile
 import random
 import StringIO
@@ -55,10 +52,10 @@ class Browser:
         #TODO: set default proxy type to AUTO req- enable detection
         self.proxyType = "SOCKS4"
         self.proxiesOnly = False # for secure only connections
+        #TODO: maybe make cookies read from memory
         if cookies == True:
             self.tempfile, self.tempfilename = tempfile.mkstemp()
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
-        self.get_random_proxy()
         self.headers = ["""Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5""" ,
                        """Accept-Language: en-US,en;q=0.5""",
                        """Accept-Encoding: gzip,deflate""",
@@ -66,29 +63,31 @@ class Browser:
                        ]
 
     def __del__(self):
-    
+        """Shutdown"""
         #print 'garbage collected'
         self.close()
     def set_keep_alive(self):
+        """turn on keep alives"""
         #This should only be settable once
         #currently doesn't allow you to turn off keep alive
         if self.keepAlive == False:
             self.headers.append('Connection: keep-alive')
             self.headers.append('Keep-Alive: 300')
             self.keepAlive = True
-    def get_random_proxy(self):
-        if len(self.proxyList) > 1:
-            self.currentProxy = random.choice(self.proxyList)
     def get_cookies(self):
-        return ''
-    def detect_proxy_type(cls):
+        """stub for getting cookies"""
+        pass
+    def detect_proxy_type(self):
+        """stub for detecting the type of proxy"""
         pass
     def close(self):
+        """this is a shutdown method"""
         #file exists
         if self.hasCookies == True:
             os.close(self.tempfile)
             os.remove(self.tempfilename)
     def simple_request(self, url):
+        """this is a simple call wrapper"""
         return self.request(BrowserRequest(url=url))
     def request(self, r):
         """Performs a http request"""
@@ -104,7 +103,6 @@ class Browser:
                 return BrowserResponse(success=False, 
                                         errorMsg="tries greater than " +
                                         str(self.retryLimit) + " " + url)
-                exit
             elif tries > 0:
                 #print "retry "  + str(tries) + " " + str(id) + " " + time.strftime("%I:%M:%S %p",time.localtime())
                 pass
@@ -159,11 +157,11 @@ class Browser:
                 if self.proxyType == "AUTO":
                     self.detect_proxy_type()
                 if self.useProxyDns and self.proxyType == "SOCKS4":
-                    c.setopt(pycurl.PROXYTYPE,6)
+                    c.setopt(pycurl.PROXYTYPE, 6)
                 elif self.proxyType == "SOCKS4":
-                    c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS4)
+                    c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_SOCKS4)
                 elif self.proxyType == "SOCKS5":
-                    c.setopt(pycurl.PROXYTYPE,pycurl.PROXYTYPE_SOCKS5)
+                    c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_SOCKS5)
             elif proxy == None and self.proxiesOnly == True:
                 return BrowserResponse(success=False, errorMsg="alert no proxy")
             c.setopt(pycurl.HTTPHEADER, self.headers)
@@ -180,22 +178,25 @@ class Browser:
                                     responseURI=responseURI)
         except pycurl.error, e:
             if self.verbose:
+                
+                print "pycurl error tries", tries, str(e.args) ,  url
                 pass
-                #print "pycurl error tries", tries, str(inst.args) ,  url
             #TODO add retry code here
             return BrowserResponse(success=False, errorMsg="raised a \
                             pycurl.error " + str(e.args), errorCode = e[0])
-        except Exception, inst:
+        except Exception, e:
             if self.verbose:
 				
-                #print "pycurl error tries", tries, str(inst.args) ,  url
+                print "pycurl error tries", tries, str(e.args) ,  url
                 e = sys.exc_info()[1]
-                logging.debug(e)
+                #logging.debug(e)
 
-            return BrowserResponse(success=False,errorMsg = "raised a general exception")
-        return BrowserResponse(success=False,errorMsg = "did nothing")
+            return BrowserResponse(success=False, errorMsg="raised a general exception")
+        return BrowserResponse(success=False, errorMsg="did nothing")
 class BrowserResponse:
-    def __init__(self, success=True, response='',code='', 
+    """This is a the response object to return all variables related to
+    a browser request"""
+    def __init__(self, success=True, response='', code=None, 
             errorCode='', errorMsg='', responseURI=''):
         
         #unimplemented------------------------
@@ -215,12 +216,14 @@ class BrowserResponse:
         self.errorMsg = errorMsg
         return None
 class BrowserRequest:
+    """This is the Request object that contains the tricky stuff 
+    for a http request"""
     def __init__(self, url='', post=None, referer='', proxy=None):
         #unimplemented
-        self.cookies =''
+        self.cookies = ''
         
         #implemented
-        self.url= url
+        self.url = url
         if referer == '':
             self.referer = self.url
         else:
