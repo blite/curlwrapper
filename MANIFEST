@@ -6,6 +6,9 @@ README.txt
 setup.py
 bin/tamperConvert.py
 curlwrapper/__init__.py
+curlwrapper/basebrowser.py
 curlwrapper/browser.py
+curlwrapper/native.py
+curlwrapper/socks.py
 curlwrapper/test/__init__.py
 curlwrapper/test/test_all.py

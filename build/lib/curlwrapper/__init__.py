@@ -9,30 +9,12 @@ __name__ = "curlwrapper"
 __all__ = [
     'Browser',
     'BaseBrowser',
-    'Request',
-    'Response'
     'BrowserRequest',
     'BrowserResponse',    
 ]
-"""
-__all__ = [
-    'Browser',
-    'Cookie',
-    'CookieJar',
-    'CookiePolicy',
-    'History',
-    'Link',
-    'LinkNotFoundError',
-    'LinksFactory',
-    'LoadError',
-    'Request',
-    'UserAgent',
-    'Proxy',
-    ]
-"""
-from basebrowser import BaseBrowser, Response, Request   
+
+
+from basebrowser import BaseBrowser, BrowserResponse, BrowserRequest   
 
 from browser import \
      Browser
-BrowserResponse = Response
-BrowserRequest = Request    
