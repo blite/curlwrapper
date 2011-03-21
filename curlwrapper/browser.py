@@ -1,4 +1,9 @@
-from basebrowser import BaseBrowser, BrowserResponse, BrowserRequest
+#!/usr/bin/env python
+from basebrowser import BaseBrowser
+#from request import Request
+#from response import Response
+from curlwrapper.request import Request as BrowserRequest
+from curlwrapper.response import Response as BrowserResponse
 import pycurl
 import StringIO
 import sys

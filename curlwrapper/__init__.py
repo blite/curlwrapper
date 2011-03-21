@@ -11,8 +11,6 @@ __all__ = [
     'BaseBrowser',
     'Request',
     'Response'
-    'BrowserRequest',
-    'BrowserResponse',    
 ]
 """
 __all__ = [
@@ -30,9 +28,12 @@ __all__ = [
     'Proxy',
     ]
 """
-from basebrowser import BaseBrowser, Response, Request   
+from basebrowser import BaseBrowser
+from request import Request
+from response import Response
 
 from browser import \
      Browser
+
 BrowserResponse = Response
 BrowserRequest = Request    

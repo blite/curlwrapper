@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+import StringIO
+
 class Response:
     """This is a the response object to return all variables related to
     a browser request"""
@@ -24,6 +27,8 @@ class Response:
         self.success = success
         self.error_code = error_code
         self.error_msg = error_msg  
+        self.content_length = None
+
         #implemented------------------------
         self.set_data(code, 
             error_code, error_msg)

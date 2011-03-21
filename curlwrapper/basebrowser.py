@@ -8,6 +8,8 @@ import time
 import StringIO
 import urllib
 import Cookie
+from curlwrapper.request import Request as BrowserRequest
+from curlwrapper.response import Response as BrowserResponse
 #todo switch to cStringIO
 
 class NullHandler(logging.Handler):
