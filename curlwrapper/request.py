@@ -1,3 +1,5 @@
+import urllib
+
 class Request:
     """This is the Request object that contains the tricky stuff 
     for a http request"""

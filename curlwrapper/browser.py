@@ -12,8 +12,13 @@ import traceback
 
 class Browser(BaseBrowser): #CURL
     def request(self, r):
-        """Performs a http request"""
-        url = r.url.encode('utf-8')
+        """
+        Performs a http request
+        """
+        try:
+            url = r.url.encode('utf-8')
+        except UnicodeDecodeError:
+            print r.url
         referer = r.referer.encode('utf-8')
         post = r.post
         proxy = r.proxy
@@ -46,7 +51,7 @@ class Browser(BaseBrowser): #CURL
                 self.c.setopt(pycurl.RANGE, '0-%s'%(self.range*1024))
             if self.redirect == True:
                 self.c.setopt(pycurl.FOLLOWLOCATION, True)
-                self.c.setopt(pycurl.MAXREDIRS, 10)
+                self.c.setopt(pycurl.MAXREDIRS, 15)
             elif self.redirect == False:
                 self.c.setopt(pycurl.FOLLOWLOCATION, False)
                 self.c.setopt(pycurl.MAXREDIRS, 0)

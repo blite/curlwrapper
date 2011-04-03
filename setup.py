@@ -41,13 +41,13 @@ Topic :: Text Processing :: Markup :: XML
 """   
 
 setup(name="curlwrapper",
-    version='0.1.34',
+    version='0.1.41',
     author="Ben Holloway",
     author_email="yawollohneb@yahoo.com",
     description="curlwrapper (browser interface for curl)",
     #scripts=['bin/tamperConvert.py'],
 
-    url="github.com/pythonben/curlwrapper/",
+    url="http://github.com/pythonben/curlwrapper/",
     packages=['curlwrapper', 'curlwrapper.test'],
     license="LGPL/MIT",
     classifiers = [c for c in CLASSIFIERS.split("\n") if c],

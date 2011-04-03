@@ -8,6 +8,8 @@ bin/tamperConvert.py
 curlwrapper/__init__.py
 curlwrapper/basebrowser.py
 curlwrapper/browser.py
+curlwrapper/request.py
+curlwrapper/response.py
 curlwrapper/native.py
 curlwrapper/socks.py
 curlwrapper/test/__init__.py

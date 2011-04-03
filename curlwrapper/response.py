@@ -60,14 +60,23 @@ class Response:
             pass
             #print cookie.split('\t')
 
-
-
     def parse_refresh(self):
         refresh_url = False
         try:
-            refresh_url = self.headers['Refresh'].split(';',2)[1].replace('URL=','')
+            refresh_url = self.parse_refresh_line(self.headers['Refresh'])
         except KeyError:
+            #print self.headers
             pass
         if refresh_url:
             return refresh_url
-        return False           
+        return False 
+
+    @staticmethod
+    def parse_refresh_line(refresh_line):
+        if refresh_line.find(';') == -1:
+            return False
+        refresh_line = refresh_line.split(';',2)[1]
+        refresh_line = refresh_line.replace('url=','')
+        refresh_line = refresh_line.replace('URL=','')
+        refresh_line = refresh_line.strip()
+        return refresh_line 
