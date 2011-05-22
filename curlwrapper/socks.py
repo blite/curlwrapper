@@ -394,6 +394,8 @@ class socksocket(socket.socket):
         else:
             raise GeneralProxyError((4, _generalerrors[4]))
 
+
+
 class SockedHTTPConnection(httplib.HTTPConnection):
 
     def connect(self):
@@ -401,6 +403,13 @@ class SockedHTTPConnection(httplib.HTTPConnection):
         self.sock = socksocket()
         self.sock.setproxy(PROXY_TYPE_SOCKS4, self.proxy_ip,self.proxy_port)
         self.sock.connect((self.host, self.port))
+
+class SockedHTTPSConnection(httplib.HTTPSConnection):
+    def connect(self):
+        """Connect to the host and port specified in __init__."""        
+        self.sock = socksocket()
+        self.sock.setproxy(PROXY_TYPE_SOCKS4, self.proxy_ip,self.proxy_port)
+        self.sock.connect((self.host, self.port))  
 
 def SockedHTTPConnectionFactory(proxy_ip, proxy_port):
     def _get(host, port=None, strict=None, timeout=0):
@@ -413,6 +422,17 @@ def SockedHTTPConnectionFactory(proxy_ip, proxy_port):
         return bhc
     return _get
 
+def SockedHTTPSConnectionFactory(proxy_ip, proxy_port):
+    def _get(host, port=None, strict=None, timeout=0):
+        if sys.version_info < (2, 6):
+            bhc=SockedHTTPSConnection(host, port=port, strict=strict)
+        else:
+            bhc=SockedHTTPSConnection(host, port=port, strict=strict, timeout=timeout)
+        bhc.proxy_port = proxy_port
+        bhc.proxy_ip = proxy_ip
+        return bhc
+    return _get  
+
 class SockedHTTPHandler(urllib2.HTTPHandler):
     def __init__(self, proxy_ip, proxy_port):
         urllib2.HTTPHandler.__init__(self)
@@ -421,4 +441,12 @@ class SockedHTTPHandler(urllib2.HTTPHandler):
         
     def http_open(self, req):
         return self.do_open(SockedHTTPConnectionFactory(self.proxy_ip, self.proxy_port), req)
+
+class SockedHTTPSHandler(urllib2.HTTPSHandler):
+    def __init__(self, proxy_ip, proxy_port):
+        urllib2.HTTPSHandler.__init__(self)
+        self.proxy_port = proxy_port
+        self.proxy_ip = proxy_ip
+    def http_open(self, req):
+        return self.do_open(SockedHTTPSConnectionFactory(self.proxy_ip, self.proxy_port), req)     
 

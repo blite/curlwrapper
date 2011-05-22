@@ -8,8 +8,9 @@ import time
 import StringIO
 import urllib
 import Cookie
-from curlwrapper.request import Request as BrowserRequest
-from curlwrapper.response import Response as BrowserResponse
+import io
+from curlwrapper.request import Request as Request
+from curlwrapper.response import Response as Response
 #todo switch to cStringIO
 
 class NullHandler(logging.Handler):
@@ -67,6 +68,7 @@ class BaseBrowser(object):
         # the case of repeated failures, but honestly probably doesn't 
         # contribute much
         self.has_cookies = cookies
+        self.use_real_cookie_file = False
         self.redirect = redirect
         self.proxy_list = []
         self.verbose = verbose
@@ -84,17 +86,20 @@ class BaseBrowser(object):
         self.proxy_type = "SOCKS4"
         self.proxies_only = False # for secure only connections
         #TODO: maybe make cookies read from memory
-        self.tempfile = ''
-        self.tempfilename = ''
-        if cookies == True:
-            self.tempfile, self.tempfilename = tempfile.mkstemp()
+        if self.has_cookies:
+            if self.use_real_cookie_file:
+                self.cookie_file = tempfile.NamedTemporaryFile()
+                self.cookie_file_path = self.cookie_file.name
+            else:
+                self.cookie_file_path = ""
+
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
-        self.headers = [
-            """Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5""",
-           """Accept-Language: en-US,en;q=0.5""",
-           """Accept-Encoding: gzip,deflate""",
-           """Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3"""
-        ]
+        self.headers = {
+            'Accept': 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+        }
 
     def __del__(self):
         """
@@ -102,16 +107,23 @@ class BaseBrowser(object):
         """
         #print 'garbage collected'
         self.close()
-    def set_keep_alive(self):
+    def enable_keep_alive(self):
         """
         turn on keep alives
         """
-        #This should only be settable once
-        #currently doesn't allow you to turn off keep alive
         if self.keep_alive == False:
-            self.headers.append('Connection: keep-alive')
-            self.headers.append('Keep-Alive: 300')
+            self.headers['Connection'] = 'keep-alive'
+            self.headers['Keep-Alive'] = '300'
             self.keep_alive = True
+
+    def disable_keep_alive(self):
+        """
+        turn off keep alives
+        """
+        if self.keep_alive == True:
+            del self.headers['Connection']
+            del self.headers['Keep-Alive']
+            self.keep_alive = False 
     def get_cookies(self):
         """
         stub for getting cookies
@@ -131,23 +143,17 @@ class BaseBrowser(object):
         """
         this is a shutdown method
         """
-        #file exists
-        if self.has_cookies == True:
-            os.close(self.tempfile)
-            os.remove(self.tempfilename)
-    def simple_request(self, url):
+
+    def fetch(self, url):
         """
         this is a simple call wrapper
         """
-        return self.request(BrowserRequest(url=url))
+        return self.request(Request(url=url))
     def request(self, r):
         """
         Performs a http request
         """
         pass
-        
-
-                
         
 
 if __name__ == "__main__":

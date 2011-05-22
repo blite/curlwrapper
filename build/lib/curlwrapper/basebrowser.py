@@ -8,6 +8,9 @@ import time
 import StringIO
 import urllib
 import Cookie
+import io
+from curlwrapper.request import Request as Request
+from curlwrapper.response import Response as Response
 #todo switch to cStringIO
 
 class NullHandler(logging.Handler):
@@ -65,6 +68,7 @@ class BaseBrowser(object):
         # the case of repeated failures, but honestly probably doesn't 
         # contribute much
         self.has_cookies = cookies
+        self.use_real_cookie_file = False
         self.redirect = redirect
         self.proxy_list = []
         self.verbose = verbose
@@ -82,17 +86,20 @@ class BaseBrowser(object):
         self.proxy_type = "SOCKS4"
         self.proxies_only = False # for secure only connections
         #TODO: maybe make cookies read from memory
-        self.tempfile = ''
-        self.tempfilename = ''
-        if cookies == True:
-            self.tempfile, self.tempfilename = tempfile.mkstemp()
+        if self.has_cookies:
+            if self.use_real_cookie_file:
+                self.cookie_file = tempfile.NamedTemporaryFile()
+                self.cookie_file_path = self.cookie_file.name
+            else:
+                self.cookie_file_path = ""
+
             #self.tempfile, self.tempfilename = tempfile.TemporaryFile()
-        self.headers = [
-            """Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5""",
-           """Accept-Language: en-US,en;q=0.5""",
-           """Accept-Encoding: gzip,deflate""",
-           """Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3"""
-        ]
+        self.headers = {
+            'Accept': 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+        }
 
     def __del__(self):
         """
@@ -107,14 +114,19 @@ class BaseBrowser(object):
         #This should only be settable once
         #currently doesn't allow you to turn off keep alive
         if self.keep_alive == False:
-            self.headers.append('Connection: keep-alive')
-            self.headers.append('Keep-Alive: 300')
+            self.headers['Connection'] = 'keep-alive'
+            self.headers['Keep-Alive'] = '300'
             self.keep_alive = True
     def get_cookies(self):
         """
         stub for getting cookies
         """
         pass
+    def set_cookies(self, cookies):
+        """
+        stub for setting cookies
+        """
+        pass      
     def detect_proxy_type(self):
         """
         stub for detecting the type of proxy
@@ -124,111 +136,19 @@ class BaseBrowser(object):
         """
         this is a shutdown method
         """
-        #file exists
-        if self.has_cookies == True:
-            os.close(self.tempfile)
-            os.remove(self.tempfilename)
-    def simple_request(self, url):
+
+    def fetch(self, url):
         """
         this is a simple call wrapper
         """
-        return self.request(BrowserRequest(url=url))
+        return self.request(Request(url=url))
     def request(self, r):
         """
         Performs a http request
         """
         pass
         
-class BrowserResponse:
-    """This is a the response object to return all variables related to
-    a browser request"""
-    def __init__(self, success=True, response='', code=None, 
-            error_code='', error_msg='', response_URI=''):
-        
-        #unimplemented------------------------
-        #name of server that sent response
-        self.server = '' 
-        #Gets the URI of the Internet resource that responded to 
-        #the request.
-        #Gets or sets the cookies that are associated with this response.
-        self.cookies = []
-        self.headers = []
-        self.success = False 
-        self.raw_headers = StringIO.StringIO()
-        self.raw_cookies = []
-        self.status_code = code
-        self.response_URI = response_URI
-        self.redirect_count = None
-        self.redirect_url = None
-        self.statusCode = self.status_code 
-        self.response_buffer = StringIO.StringIO()
-        self.success = success
-        self.error_code = error_code
-        self.error_msg = error_msg  
-        #implemented------------------------
-        self.set_data(code, 
-            error_code, error_msg)
-    @property
-    def response(self):
-        return self.response_buffer.getvalue()
 
-    def set_data(self, code=None,
-            error_code='', error_msg=''):
-        self.status_code = code
-        self.statusCode = self.status_code
-        #maybe call this .body as well?
-        self.parse_headers()
-        self.parse_cookies()
-
-    def parse_headers(self):
-        headers = self.raw_headers.getvalue().splitlines()
-        #print headers
-        new_h = {}
-        for h in headers:
-            values = h.split(':', 1)
-            if len(values) == 2:
-                new_h[values[0].strip()] = values[1].strip()
-        self.headers = new_h
-        #print self.headers
-
-    def parse_cookies(self):
-        for cookie in self.raw_cookies:
-            pass
-            #print cookie.split('\t')
-
-
-
-    def parse_refresh(self):
-        refresh_url = False
-        try:
-            refresh_url = self.headers['Refresh'].split(';',2)[1].replace('URL=','')
-        except KeyError:
-            pass
-        if refresh_url:
-            return refresh_url
-        return False
-                
-        
-class BrowserRequest:
-    """This is the Request object that contains the tricky stuff 
-    for a http request"""
-    def __init__(self, url='', post=None, referer='', proxy=None):
-        #unimplemented
-        self.cookies = ''
-        #implemented
-        self.url = url
-        if referer == '':
-            self.referer = self.url
-        else:
-            self.referer = referer
-        if isinstance(post, dict):
-            self.post = urllib.urlencode(post)
-        else:
-            self.post = post
-        self.proxy = proxy
-        self.tries = 0
-    
-        return None
 if __name__ == "__main__":
     b = Browser()
     b.keepAlive = True

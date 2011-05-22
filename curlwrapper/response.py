@@ -47,11 +47,12 @@ class Response:
     def parse_headers(self):
         headers = self.raw_headers.getvalue().splitlines()
         #print headers
-        new_h = {}
+        #headers should be a list not a dict as there can be more than one Set-Cookie header etc
+        new_h = []
         for h in headers:
             values = h.split(':', 1)
             if len(values) == 2:
-                new_h[values[0].strip()] = values[1].strip()
+                new_h.append((values[0].strip(), values[1].strip()))
         self.headers = new_h
         #print self.headers
 
